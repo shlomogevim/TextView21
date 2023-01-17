@@ -25,13 +25,20 @@ const val BUTTON_MARGIN = "button_margin"
 class MainActivity : AppCompatActivity() {
     val helper=Helper()
 
+    val initDistancePosition= TOP_MARGIN
+//        var initDistancePosition= BUTTON_MARGIN
 
-    var initDistance = 1300
+
+
+    var postText: ArrayList<String> =  arrayListOf(
+        " אין בשבילך יופי בעולם ",
+        " מלבד מה שאתה תופס כרגע ",
+        " כיופי. ",
+    )
+    var initDistance = 100
     var spaceBetweenLines = 30
-    val textViewNumber = 3
+    val textViewNumber = postText.size
     val textSize = 27f
-    val initDistancePosition= BUTTON_MARGIN
-//    val initDistancePosition= TOP_MARGIN
     var screenHeight =0
     var tvHeight =0
     var wholeLinesHeight=0
@@ -42,14 +49,6 @@ class MainActivity : AppCompatActivity() {
     val lineSpacing = 1.2f
     val alpha = 10
     val font=103
-    var postText: ArrayList<String> =  arrayListOf(
-        " אין בשבילך יופי בעולם ",
-        " מלבד מה שאתה תופס כרגע ",
-        " כיופי. ",
-    )
-
-
-
 
 
 
@@ -57,15 +56,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.hide()
-     screenHeight = resources.displayMetrics.heightPixels
-
-        val constraintLayout = ConstraintLayout(this)
-        setContentView(constraintLayout)
-        if (initDistancePosition==BUTTON_MARGIN){
-          //   initDistance=marginFromTheButtom()
-        }
+        screenHeight = resources.displayMetrics.heightPixels
         val handler = Handler()
         val textViews = ArrayList<TextView>()
+        val constraintLayout = ConstraintLayout(this)
+        setContentView(constraintLayout)
+
 
         for (i in 1..textViewNumber) {
             val textView = addTextView(constraintLayout, "  מה קורה מלך $i")
