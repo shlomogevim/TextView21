@@ -3,42 +3,39 @@ package com.sg.textview21
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.ThemedSpinnerAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
-import kotlin.math.min
+import com.bumptech.glide.Glide
 
 const val TOP_MARGIN = "top_margin"
 const val BUTTON_MARGIN = "button_margin"
 
 class MainActivity : AppCompatActivity() {
     val helper=Helper()
+    val handler=Handler()
 
-    val initDistancePosition= TOP_MARGIN
-//        var initDistancePosition= BUTTON_MARGIN
-
-
+//    val initDistancePosition= TOP_MARGIN
+        var initDistancePosition= BUTTON_MARGIN
 
     var postText: ArrayList<String> =  arrayListOf(
         " אין בשבילך יופי בעולם ",
         " מלבד מה שאתה תופס כרגע ",
         " כיופי. ",
     )
-    var initDistance = 100
-    var spaceBetweenLines = 30
+    var initDistance = 10
+    var spaceBetweenLines = 0
     val textViewNumber = postText.size
-    val textSize = 27f
+    val textSize = 16f
     var screenHeight =0
     var tvHeight =0
     var wholeLinesHeight=0
@@ -49,28 +46,56 @@ class MainActivity : AppCompatActivity() {
     val lineSpacing = 1.2f
     val alpha = 10
     val font=103
-
-
+    val imageUrl = "https://cdn.pixabay.com/photo/2023/01/10/00/17/italy-7708552_960_720.jpg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.hide()
         screenHeight = resources.displayMetrics.heightPixels
-        val handler = Handler()
-        val textViews = ArrayList<TextView>()
+
         val constraintLayout = ConstraintLayout(this)
         setContentView(constraintLayout)
 
+      loadImage(constraintLayout,imageUrl)
+     setText(constraintLayout)
 
+    }
+
+    fun loadImage(layout: ConstraintLayout, imageUrl: String) {
+        val imageView = ImageView(layout.context)
+        imageView.id = View.generateViewId()
+        val params = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.MATCH_PARENT
+        )
+        params.dimensionRatio = "H,1:1"
+        params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+        params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+        imageView.layoutParams = params
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        layout.addView(imageView)
+
+        Glide.with(layout.context)
+            .load(imageUrl)
+            .into(imageView)
+    }
+
+
+
+    private fun setText(constraintLayout: ConstraintLayout) {
+        val textViews = ArrayList<TextView>()
         for (i in 1..textViewNumber) {
-            val textView = addTextView(constraintLayout, "  מה קורה מלך $i")
+//            val textView = addTextView(constraintLayout, "  מה קורה מלך $i")
+            val textView = addTextView(constraintLayout, postText[i-1])
             handler.postDelayed({
 
                 if (i==1) {
                     tvHeight = textView.height
-                   wholeLinesHeight=tvHeight*textViewNumber+spaceBetweenLines*textViewNumber
-                  updateInitDistance(textViews)
+                    wholeLinesHeight=tvHeight*textViewNumber+spaceBetweenLines*textViewNumber
+                    updateInitDistance(textViews)
                 }
 
                 setTextViewConstraints(constraintLayout, textView, textViews.lastOrNull())
@@ -78,6 +103,23 @@ class MainActivity : AppCompatActivity() {
             }, (100 * i).toLong())
         }
     }
+
+    fun setBackgroundPicture(constraintLayout: ConstraintLayout){
+       val imageView = ImageView(this)
+       val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+       imageView.layoutParams = layoutParams
+
+       val imageUrl = "https://cdn.pixabay.com/photo/2023/01/03/10/35/butterfly-7694101_960_720.jpg"
+       Glide.with(this)
+           .load(imageUrl)
+           .into(imageView)
+
+       constraintLayout.addView(imageView)
+
+
+
+
+   }
     private fun updateInitDistance(textViews: ArrayList<TextView>) {
         val screenHeight = resources.displayMetrics.heightPixels
         if (initDistancePosition== TOP_MARGIN){
