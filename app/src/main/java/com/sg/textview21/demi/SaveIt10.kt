@@ -1,6 +1,42 @@
-package com.sg.textview21
+package com.sg.textview21.demi
 
 class SaveIt10 {
+
+
+    /*  private fun setDataToPost() {
+        val post = Post()
+        with(post) {
+            postNum = 4999071
+            lineNum = 4
+            imageUri = "https://cdn.pixabay.com/photo/2017/01/30/15/23/memory-2021124_960_720.jpg"
+            postText = arrayListOf(
+                " זכרון העבר ",
+                " זה מה שקרה לך בעבר, ",
+                "  טעות היא  ",
+                " להכפיף את ההווה שלך לזה. "
+            )
+            postId = 87
+            textLocation = arrayListOf(10,-1, 33,10,0,0, 0, 0)
+            postPadding = arrayListOf(10, 0, 10, 0)
+            postTransparency =5
+            postTextSize = arrayListOf(0, 15)
+            val backgroundColor = "#0A174E"
+            val textColor = "#F5D042"
+            postFontFamily = 103
+         //   postBackground = util.improveColorString(backgroundColor)
+        //    val textcolo = util.improveColorString(textColor)
+         //   val col = "#$textcolo"
+        //    postTextColor = arrayListOf(CONSTANT, col)
+            videoUrl = "9UVjjcOUJLE"
+         //   videoText = util1.getPostExplanation(postNum, postText)
+        }
+      //  drawPost.drawPostFire(post, layout)
+      //  util.sendPostToStringFirestore(post)
+    }*/
+
+
+
+
 
    /*
 class MainActivity : AppCompatActivity() {
