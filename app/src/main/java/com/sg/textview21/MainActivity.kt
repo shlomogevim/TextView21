@@ -87,12 +87,9 @@ class MainActivity : AppCompatActivity() {
             initDistance=dataAr[1]
         }
 //Log.d("gg"," 89   initDistancePosition=$initDistancePosition   initDistance=$initDistance  spaceBetweenLines=$spaceBetweenLines")
-
-
     }
 
     private fun createPost():Post {
-
             val post = Post()
             with(post) {
                 postNum = 4999071
@@ -125,8 +122,6 @@ class MainActivity : AppCompatActivity() {
 
          return post
     }
-
-
 
 
     private fun setText(constraintLayout: ConstraintLayout,post: Post) {
@@ -204,67 +199,8 @@ class MainActivity : AppCompatActivity() {
                 ConstraintSet.TOP, distanceTop
             )
         }
-
     }
 
-
-  /*
-   private fun arangeText10(index: Int, currentTV: TextView, post: Post) {
-        util.logi("DrawGeneralPost/arangeText10/ 315==>index=$index  currentTV=$currentTV   postText=${post.postText}")
-
-        val line = index - 1
-        val ind1 = post.lineNum - line - 1
-        var top = post.textLocation[1]
-        if (top != NO_TOP) {
-            top = top.toPx()
-        }
-        val dis = post.textLocation[2].toPx()
-        var bottom = post.textLocation[3]
-        if (bottom != NO_BOTTOM) {
-            bottom = bottom.toPx()
-        }
-        val line1 = post.textLocation[4]                                   // from this line
-        val dis1 = post.textLocation[5].toPx()
-        val line2 = post.textLocation[6]                                // from this line
-        val dis2 = post.textLocation[7].toPx()
-        var distanceBotton = bottom + dis * ind1
-        var distanceTop = top + dis * line
-
-        if (top == NO_TOP) {                                                                            //locate in the bottom
-            if (line <= line1) {
-                distanceBotton += dis1
-            }
-            if (line <= line2) {
-                //    util.logi("DrawGeneral 290 line=$line   line2=$line2 ")
-                distanceBotton += dis2
-            }
-
-            constraintSet.connect(
-                currentTV.id,
-                ConstraintSet.BOTTOM,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.BOTTOM, distanceBotton
-            )
-        }
-
-        if (bottom == NO_BOTTOM) {                                                                            //locate in the top
-//            var distance = (top + (dis * line)).toPx()                                                //10, 0,              35,   NO_BOTTOM,     0,       500,         0,          0
-//              util.logi("DrawGeneral 303  line=$line   line1=$line1 ")
-            if (line >= line1) {
-//                util.logi("DrawGeneral 305  line=$line   line1=$line1 ")
-                distanceTop += dis1
-            }
-            if (line >= line2) {
-                distanceTop += dis2
-            }
-            constraintSet.connect(
-                currentTV.id,
-                ConstraintSet.TOP,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.TOP, distanceTop
-            )
-        }
-    }*/
 
      private fun updateInitDistance(textViews: ArrayList<TextView>) {
         val screenHeight = resources.displayMetrics.heightPixels
@@ -291,13 +227,14 @@ class MainActivity : AppCompatActivity() {
        // textView.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
         val pad=post.postPadding
         textView.setPadding(pad[0].toPx(),pad[1].toPx(),pad[2].toPx(),pad[3].toPx())
+        textView.alpha = post.postTransparency/10f
+        val typeface=helper.getFamilyFont(post.postFontFamily)
+        textView.typeface= ResourcesCompat.getFont(this, typeface)
+
         textView.setLineSpacing(0f, post.lineSpacing)
 /*The first parameter is the extra space that will be added to the height of each line of text,
  and the second parameter is the multiplication factor that will be applied to the default line spacing.*/
-        textView.alpha = post.postTransparency/10f
 
-        val typeface=helper.getFamilyFont(post.postFontFamily)
-        textView.typeface= ResourcesCompat.getFont(this, typeface)
 
         val layoutParams = ConstraintLayout.LayoutParams(
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -378,13 +315,70 @@ fun updateColor(str: String): String {
     return "#" + str.replace("[^A-Za-z0-9]".toRegex(), "")
 }
 
-
 fun dpToPx(dp: Int, context: Context): Float {
     return dp.toFloat() * context.resources.displayMetrics.density
 }
 
 
 
+
+/*
+ private fun arangeText10(index: Int, currentTV: TextView, post: Post) {
+      util.logi("DrawGeneralPost/arangeText10/ 315==>index=$index  currentTV=$currentTV   postText=${post.postText}")
+
+      val line = index - 1
+      val ind1 = post.lineNum - line - 1
+      var top = post.textLocation[1]
+      if (top != NO_TOP) {
+          top = top.toPx()
+      }
+      val dis = post.textLocation[2].toPx()
+      var bottom = post.textLocation[3]
+      if (bottom != NO_BOTTOM) {
+          bottom = bottom.toPx()
+      }
+      val line1 = post.textLocation[4]                                   // from this line
+      val dis1 = post.textLocation[5].toPx()
+      val line2 = post.textLocation[6]                                // from this line
+      val dis2 = post.textLocation[7].toPx()
+      var distanceBotton = bottom + dis * ind1
+      var distanceTop = top + dis * line
+
+      if (top == NO_TOP) {                                                                            //locate in the bottom
+          if (line <= line1) {
+              distanceBotton += dis1
+          }
+          if (line <= line2) {
+              //    util.logi("DrawGeneral 290 line=$line   line2=$line2 ")
+              distanceBotton += dis2
+          }
+
+          constraintSet.connect(
+              currentTV.id,
+              ConstraintSet.BOTTOM,
+              ConstraintSet.PARENT_ID,
+              ConstraintSet.BOTTOM, distanceBotton
+          )
+      }
+
+      if (bottom == NO_BOTTOM) {                                                                            //locate in the top
+//            var distance = (top + (dis * line)).toPx()                                                //10, 0,              35,   NO_BOTTOM,     0,       500,         0,          0
+//              util.logi("DrawGeneral 303  line=$line   line1=$line1 ")
+          if (line >= line1) {
+//                util.logi("DrawGeneral 305  line=$line   line1=$line1 ")
+              distanceTop += dis1
+          }
+          if (line >= line2) {
+              distanceTop += dis2
+          }
+          constraintSet.connect(
+              currentTV.id,
+              ConstraintSet.TOP,
+              ConstraintSet.PARENT_ID,
+              ConstraintSet.TOP, distanceTop
+          )
+      }
+  }*/
 
 /* private fun marginFromTheButtom(): Int {
         var diser1=0
