@@ -18,44 +18,25 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.sg.textview21.model.Post
-import com.sg.textview21.tools.CONSTANT
-import com.sg.textview21.tools.NO_BOTTOM
-import com.sg.textview21.tools.NO_TOP
 
 const val TOP_MARGIN = "top_margin"
 const val BUTTON_MARGIN = "button_margin"
 
+const val TOP = "top"
+const val BOTTOM = "bottom"
+
 class MainActivity : AppCompatActivity() {
-    val helper=Helper()
-    val handler=Handler()
-    lateinit var post:Post
+    val helper = Helper()
+    val creatPost = CreatePosts()
+    val handler = Handler()
+    lateinit var post: Post
     var constraintSet = ConstraintSet()
-
-//    val initDistancePosition= TOP_MARGIN
-    //    var initDistancePosition= BUTTON_MARGIN
-        var initDistancePosition= ""
-
-  /*  var postText: ArrayList<String> =  arrayListOf(
-        " אין בשבילך יופי בעולם ",
-        " מלבד מה שאתה תופס כרגע ",
-        " כיופי. ",
-    )*/
+    var initDistancePosition = ""
     var initDistance = 0
     var spaceBetweenLines = 0
- //   val textViewNumber = postText.size
-   // val textSize = 16f
-    var screenHeight =0
-    var tvHeight =0
-    var wholeLinesHeight=0
-    //val textColor="#F5D042"
-   // val backgroundColor="#0A174E"
-  //  val radius=15
-   // var postPadding:ArrayList<Int> = arrayListOf(15,0,15,0)
-   // val lineSpacing = 1.2f
-   // val alpha = 10
-    //val font=103
-  //  val imageUrl = "https://cdn.pixabay.com/photo/2023/01/10/00/17/italy-7708552_960_720.jpg"
-  //  var textLocation:ArrayList<Int> = arrayListOf<Int>(100,0,0,0,0)
+    var screenHeight = 0
+    var tvHeight = 0
+    var wholeLinesHeight = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,173 +44,272 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.hide()
         screenHeight = resources.displayMetrics.heightPixels
-
-
         val constraintLayout = ConstraintLayout(this)
         constraintSet.clone(constraintLayout)
         setContentView(constraintLayout)
-        post=createPost()
-        set_data(post)
-        loadImage(constraintLayout,post)
-        setText(constraintLayout,post)
+        post = creatPost.createPost4999071()
+        setData(post)
+        loadImage(constraintLayout, post)
+        //  setText(constraintLayout, post)
+
+        setText1(constraintLayout)
         constraintSet.applyTo(constraintLayout)
     }
 
-    private fun set_data(post: Post) {
+    private fun setData(post: Post) {
         //    textLocation = arrayListOf(10,-1, 33,10,0,0, 0, 0)
-        var dataAr=post.textLocation
-        spaceBetweenLines=dataAr[2]
-        if (dataAr[1]==-1){
-            initDistancePosition= BUTTON_MARGIN
-            initDistance=dataAr[3]
-        }else{
-            initDistancePosition=TOP_MARGIN
-            initDistance=dataAr[1]
+        val dataAr = post.textLocation
+        spaceBetweenLines = dataAr[2]
+        if (dataAr[1] == -1) {
+            initDistancePosition = BOTTOM
+            initDistance = dataAr[3]
+        } else {
+            initDistancePosition = TOP
+            initDistance = dataAr[1]
         }
-//Log.d("gg"," 89   initDistancePosition=$initDistancePosition   initDistance=$initDistance  spaceBetweenLines=$spaceBetweenLines")
     }
 
-    private fun createPost():Post {
-            val post = Post()
-            with(post) {
-                postNum = 4999071
-                lineNum = 4
-                imageUri ="https://cdn.pixabay.com/photo/2023/01/10/00/17/italy-7708552_960_720.jpg"
-                postText = arrayListOf(
-                    " זכרון העבר ",
-                    " זה מה שקרה לך בעבר, ",
-                    "  טעות היא  ",
-                    " להכפיף את ההווה שלך לזה. "
-                )
-                postId = 87
+    private fun setText1(constraintLayout: ConstraintLayout) {
+        val dataAr = post.textLocation
+        val lines= post.postText
+        var position = ""
+        var margin = 0
+        val lineDistance = dataAr[2]
 
-//                textLocation = arrayListOf(10,100,0,-1,0,0, 0, 0)  //  Top  o.k.
-                textLocation = arrayListOf(10,0,0,-1,0,0, 0, 0)  //  Button   n.o.k.
-                postPadding = arrayListOf(0, 0, 10,0)
-                postTransparency =10
-                postTextSize = arrayListOf(0, 16)
-                val backgroundColor = "#0A174E"
-                val textColor = "#F5D042"
-                postFontFamily = 103
+        if (dataAr[1] == -1) {
+            position = TOP
+            margin = dataAr[3]
+        }
 
-                postBackground = backgroundColor
-                postTextColor = arrayListOf(CONSTANT, textColor)
-                videoUrl = "9UVjjcOUJLE"
-                //   videoText = util1.getPostExplanation(postNum, postText)
+        if (dataAr[3] == -1) {
+            position = BOTTOM
+            margin = dataAr[1]
+        }
+        logi("90  dataAr=${dataAr.toString()}  ")
+        logi("91 || margin=$margin || position=$position ||lineDistance=$lineDistance  || lines=$lines")
+
+       addTextViews(constraintLayout, lines as ArrayList<String>, margin, position, lineDistance)
+    }
+
+    private fun addTextViews(
+        layout: ConstraintLayout,
+        lines: ArrayList<String>,
+        margin: Int,
+        position: String,
+        lineDis: Int
+    ) {
+        val textViews = createTextViews(lines)
+        addTextViewsToLayout(layout, textViews)
+        setConstraintsAndMargins(layout, textViews, margin, position, lineDis)
+       // addTextViewsToLayout(layout, textViews, margin, position, lineDistance, lines.size)
+    }
+
+    private fun addTextViewsToLayout(layout: ConstraintLayout, textViews: List<TextView>) {
+        for (textView in textViews) {
+            textView.id = View.generateViewId()
+            layout.addView(textView)
+        }
+    }
+    private fun setConstraintsAndMargins(
+        layout: ConstraintLayout,
+        textViews: List<TextView>,
+        margin: Int,
+        position: String,
+        lineDis: Int
+    ) {
+        for (index in 0 until textViews.size) {
+            val textView = textViews[index]
+            setMargins(textView, margin, position, lineDis, index)
+            setConstraints(textView, textViews, position, index)
+            setHorizontalBias(textView)
+        }
+    }
+
+    private fun setMargins(textView: TextView, margin: Int, position: String, lineDis: Int, index: Int) {
+        val params = textView.layoutParams as ConstraintLayout.LayoutParams
+        params.setMargins(
+            0,
+            if (position == "Top") margin else 0,
+            0,
+            if (position == "Bottom") margin else 0
+        )
+        if (position == TOP) {
+            params.topMargin = if (index > 0) lineDis else 0
+        } else {
+            params.bottomMargin = if (index > 0) lineDis else 0
+        }
+        textView.layoutParams = params
+    }
+
+    private fun setConstraints(textView: TextView, textViews: List<TextView>, position: String, index: Int) {
+        val params = textView.layoutParams as ConstraintLayout.LayoutParams
+        if (index == 0) {
+            if (position == TOP) {
+                params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            } else {
+                params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
             }
-            //  drawPost.drawPostFire(post, layout)
-            //  util.sendPostToStringFirestore(post)
+            params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        } else {
+            if (position == TOP) {
+                params.topToBottom = textViews[index - 1].id
+            } else {
+                params.bottomToTop = textViews[index - 1].id
+            }
+            params.startToStart = textViews[index - 1].id
+        }
+        textView.layoutParams = params
+    }
 
-         return post
+    private fun setHorizontalBias(textView: TextView) {
+        val params = textView.layoutParams as ConstraintLayout.LayoutParams
+        params.horizontalBias = 0.5f
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+        textView.layoutParams = params
+    }
+
+    private fun createTextViews(lines: ArrayList<String>): List<TextView> {
+        val textViews = mutableListOf<TextView>()
+        for (index in 0 until lines.size) {
+            val textView = TextView(this)
+            textView.text = lines[index]
+            textView.textSize = post.postTextSize[1].toFloat()
+            textView.setTextColor(Color.parseColor(updateColor(post.postTextColor[1])))
+            val shape = GradientDrawable()
+            shape.cornerRadius = post.postRadiuas.toFloat()
+            shape.setColor(Color.parseColor(updateColor(post.postBackground)))
+            textView.background = shape
+            // textView.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
+            val pad = post.postPadding
+            textView.setPadding(pad[0].toPx(), pad[1].toPx(), pad[2].toPx(), pad[3].toPx())
+            textView.alpha = post.postTransparency / 10f
+            val typeface = helper.getFamilyFont(post.postFontFamily)
+            textView.typeface = ResourcesCompat.getFont(this, typeface)
+            textView.setLineSpacing(0f, post.lineSpacing)
+            /*The first parameter is the extra space that will be added to the height of each line of text,
+             and the second parameter is the multiplication factor that will be applied to the default line spacing.*/
+            val layoutParams = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            )
+            textView.layoutParams = layoutParams
+            textViews.add(textView)
+        }
+        return textViews
     }
 
 
-    private fun setText(constraintLayout: ConstraintLayout,post: Post) {
+
+
+
+
+
+
+
+
+
+
+
+
+  /*  private fun addTextViewsToLayout(
+        layout: ConstraintLayout,
+        textViews: List<TextView>,
+        margin: Int,
+        position: String,
+        lineDis: Int,
+        size: Int
+    ) {
+        for (index in 0 until size) {
+            textViews[index].id = View.generateViewId()
+            layout.addView(textViews[index])
+            val params = textViews[index].layoutParams as ConstraintLayout.LayoutParams
+            params.setMargins(
+                0,
+                if (position == "Top") margin else 0,
+                0,
+                if (position == "Bottom") margin else 0
+            )
+            if (position == TOP) {
+                params.topMargin = if (index > 0) lineDis else 0
+            } else {
+                params.bottomMargin = if (index > 0) lineDis else 0
+            }
+            if (index == 0) {
+                if (position == TOP) {
+                    params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                } else {
+                    params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+                params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            } else {
+                if (position == TOP) {
+                    params.topToBottom = textViews[index - 1].id
+                } else {
+                    params.bottomToTop = textViews[index - 1].id
+                }
+                params.startToStart = textViews[index - 1].id
+            }
+            textViews[index].layoutParams = params
+        }
+    }*/
+
+
+
+
+    private fun setText(constraintLayout: ConstraintLayout, post: Post) {
         val textViews = ArrayList<TextView>()
-        val size=post.postText.size
+        val size = post.postText.size
         for (index in 1..size) {
-            val textView = addTextView(post,constraintLayout, post.postText[index-1])
-            handler.postDelayed({
-                if (index==1) {
+            val textView = addTextView(post, constraintLayout, post.postText[index - 1])
+            handler.post {
+                if (index == 1) {
                     tvHeight = textView.height
-                  wholeLinesHeight=tvHeight*size+spaceBetweenLines*size
-                  Log.d("gg"," 140  tvHeight=$tvHeight    spaceBetweenLines=$spaceBetweenLines  wholeLinesHeight=$wholeLinesHeight")
+                    Log.i("gg", "79=>tvHeight=$tvHeight")  //**********
+                    wholeLinesHeight = tvHeight * size + spaceBetweenLines * size
+                    // logi( "80=>initDistancePosition=$initDistancePosition , initDistance=$initDistance , spaceBetweenLines=$spaceBetweenLines, tvHeight=$tvHeight , wholeLinesHeight=$wholeLinesHeight")
                     updateInitDistance(textViews)
                 }
-              setTextViewConstraints(constraintLayout, textView, textViews.lastOrNull())
-             //   arrangeText10(index,textView, post )
+                setTextViewConstraints(constraintLayout, textView, textViews.lastOrNull())
                 textViews.add(textView)
-            }, (100 * index).toLong())
+            }
         }
         constraintSet.applyTo(constraintLayout)
     }
 
-    private fun arrangeText10(index: Int, currentTV: TextView, post: Post) {
-        constraintSet.clear(currentTV.id, ConstraintSet.TOP)
-        constraintSet.clear(currentTV.id, ConstraintSet.BOTTOM)
-        val line = index - 1
-        val ind1 = post.lineNum - line - 1
-        var top = post.textLocation[1]
-        if (top != NO_TOP) {
-            top = top.toPx()
-        }
-        val dis = post.textLocation[2].toPx()
-        var bottom = post.textLocation[3]
-        if (bottom != NO_BOTTOM) {
-            bottom = bottom.toPx()
-        }
-        val line1 = post.textLocation[4]                                   // from this line
-        val dis1 = post.textLocation[5].toPx()
-        val line2 = post.textLocation[6]                                // from this line
-        val dis2 = post.textLocation[7].toPx()
-        var distanceBotton = bottom + dis * ind1
-        var distanceTop = top + dis * line
-
-        if (top == NO_TOP) {                                                                            //locate in the bottom
-            if (line <= line1) {
-                distanceBotton += dis1
-            }
-            if (line <= line2) {
-                //    util.logi("DrawGeneral 290 line=$line   line2=$line2 ")
-                distanceBotton += dis2
-            }
-
-            constraintSet.connect(
-                currentTV.id,
-                ConstraintSet.BOTTOM,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.BOTTOM, distanceBotton
-            )
-        }
-
-        if (bottom == NO_BOTTOM) {                                                                            //locate in the top
-//            var distance = (top + (dis * line)).toPx()                                                //10, 0,              35,   NO_BOTTOM,     0,       500,         0,          0
-//              util.logi("DrawGeneral 303  line=$line   line1=$line1 ")
-            if (line >= line1) {
-//                util.logi("DrawGeneral 305  line=$line   line1=$line1 ")
-                distanceTop += dis1
-            }
-            if (line >= line2) {
-                distanceTop += dis2
-            }
-            constraintSet.connect(
-                currentTV.id,
-                ConstraintSet.TOP,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.TOP, distanceTop
-            )
-        }
-    }
-
-
-     private fun updateInitDistance(textViews: ArrayList<TextView>) {
+    private fun updateInitDistance(textViews: ArrayList<TextView>) {
         val screenHeight = resources.displayMetrics.heightPixels
-        if (initDistancePosition== TOP_MARGIN){
-             if (wholeLinesHeight+initDistance>screenHeight){
-                 initDistance=screenHeight-wholeLinesHeight
-             }
+        if (initDistancePosition == TOP_MARGIN) {
+            if (wholeLinesHeight + initDistance > screenHeight) {
+                initDistance = screenHeight - wholeLinesHeight
+            }
         }
-        if (initDistancePosition== BUTTON_MARGIN){
-            initDistance=screenHeight-wholeLinesHeight-initDistance
+        if (initDistancePosition == BUTTON_MARGIN) {
+            initDistance = screenHeight - wholeLinesHeight - initDistance
         }
     }
-    private fun addTextView(post: Post,constraintLayout: ConstraintLayout, text: String): TextView {
+
+    private fun addTextView(
+        post: Post,
+        constraintLayout: ConstraintLayout,
+        text: String
+    ): TextView {
         val textView = TextView(this)
         textView.id = View.generateViewId()
-        textView.gravity=Gravity.CENTER
+        textView.gravity = Gravity.CENTER
         textView.text = text
         textView.textSize = post.postTextSize[1].toFloat()
         textView.setTextColor(Color.parseColor(updateColor(post.postTextColor[1])))
         val shape = GradientDrawable()
-        shape.cornerRadius =post.postRadiuas.toFloat()
+        shape.cornerRadius = post.postRadiuas.toFloat()
         shape.setColor(Color.parseColor(updateColor(post.postBackground)))
         textView.background = shape
-       // textView.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
-        val pad=post.postPadding
-        textView.setPadding(pad[0].toPx(),pad[1].toPx(),pad[2].toPx(),pad[3].toPx())
-        textView.alpha = post.postTransparency/10f
-        val typeface=helper.getFamilyFont(post.postFontFamily)
-        textView.typeface= ResourcesCompat.getFont(this, typeface)
+        // textView.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
+        val pad = post.postPadding
+        textView.setPadding(pad[0].toPx(), pad[1].toPx(), pad[2].toPx(), pad[3].toPx())
+        textView.alpha = post.postTransparency / 10f
+        val typeface = helper.getFamilyFont(post.postFontFamily)
+        textView.typeface = ResourcesCompat.getFont(this, typeface)
 
         textView.setLineSpacing(0f, post.lineSpacing)
 /*The first parameter is the extra space that will be added to the height of each line of text,
@@ -241,6 +321,8 @@ class MainActivity : AppCompatActivity() {
             ConstraintLayout.LayoutParams.WRAP_CONTENT
         )
         textView.layoutParams = layoutParams
+//        logi( "140=>initDistancePosition=$initDistancePosition , initDistance=$initDistance , spaceBetweenLines=$spaceBetweenLines, tvHeight=$tvHeight , wholeLinesHeight=$wholeLinesHeight")
+
         constraintLayout.addView(textView)
         return textView
     }
@@ -286,7 +368,7 @@ class MainActivity : AppCompatActivity() {
         constraints.applyTo(constraintLayout)
     }
 
-    private fun loadImage(layout: ConstraintLayout, post:Post) {
+    private fun loadImage(layout: ConstraintLayout, post: Post) {
         val imageView = ImageView(layout.context)
         imageView.id = View.generateViewId()
         val params = ConstraintLayout.LayoutParams(
@@ -301,16 +383,19 @@ class MainActivity : AppCompatActivity() {
         imageView.layoutParams = params
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         layout.addView(imageView)
-
         Glide.with(layout.context)
             .load(post.imageUri)
             .into(imageView)
     }
 
 
+    fun logi(message: String) {
+        Log.i("gg", message)
+    }
 
     fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 }
+
 fun updateColor(str: String): String {
     return "#" + str.replace("[^A-Za-z0-9]".toRegex(), "")
 }
@@ -320,7 +405,99 @@ fun dpToPx(dp: Int, context: Context): Float {
 }
 
 
+/*private fun arrangeText10(index: Int, currentTV: TextView, post: Post) {
+    constraintSet.clear(currentTV.id, ConstraintSet.TOP)
+    constraintSet.clear(currentTV.id, ConstraintSet.BOTTOM)
+    val line = index - 1
+    val ind1 = post.lineNum - line - 1
+    var top = post.textLocation[1]
+    if (top != NO_TOP) {
+        top = top.toPx()
+    }
+    val dis = post.textLocation[2].toPx()
+    var bottom = post.textLocation[3]
+    if (bottom != NO_BOTTOM) {
+        bottom = bottom.toPx()
+    }
+    val line1 = post.textLocation[4]                                   // from this line
+    val dis1 = post.textLocation[5].toPx()
+    val line2 = post.textLocation[6]                                // from this line
+    val dis2 = post.textLocation[7].toPx()
+    var distanceBotton = bottom + dis * ind1
+    var distanceTop = top + dis * line
 
+    if (top == NO_TOP) {                                                                            //locate in the bottom
+        if (line <= line1) {
+            distanceBotton += dis1
+        }
+        if (line <= line2) {
+            //    util.logi("DrawGeneral 290 line=$line   line2=$line2 ")
+            distanceBotton += dis2
+        }
+
+        constraintSet.connect(
+            currentTV.id,
+            ConstraintSet.BOTTOM,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.BOTTOM, distanceBotton
+        )
+    }
+
+    if (bottom == NO_BOTTOM) {                                                                            //locate in the top
+//            var distance = (top + (dis * line)).toPx()                                                //10, 0,              35,   NO_BOTTOM,     0,       500,         0,          0
+//              util.logi("DrawGeneral 303  line=$line   line1=$line1 ")
+        if (line >= line1) {
+//                util.logi("DrawGeneral 305  line=$line   line1=$line1 ")
+            distanceTop += dis1
+        }
+        if (line >= line2) {
+            distanceTop += dis2
+        }
+        constraintSet.connect(
+            currentTV.id,
+            ConstraintSet.TOP,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.TOP, distanceTop
+        )
+    }
+}*/
+
+
+/* private fun createPost():Post {
+      val post = Post()
+      with(post) {
+          postNum = 4999071
+          lineNum = 4
+          imageUri ="https://cdn.pixabay.com/photo/2023/01/10/00/17/italy-7708552_960_720.jpg"
+          postText = arrayListOf(
+              " זכרון העבר ",
+              " זה מה שקרה לך בעבר, ",
+              "  טעות היא  ",
+              " להכפיף את ההווה שלך לזה. "
+          )
+          postId = 87
+
+              textLocation = arrayListOf(10,0,0,-1,0,0, 0, 0)  //  Top  o.k.
+//            textLocation = arrayListOf(10,0,0,-1,0,0, 0, 0)  //  Button   n.o.k.
+
+          postPadding = arrayListOf(0, 0, 10,0)
+          postTransparency =10
+          postTextSize = arrayListOf(0, 16)
+          val backgroundColor = "#0A174E"
+          val textColor = "#F5D042"
+          postFontFamily = 103
+
+          postBackground = backgroundColor
+          postTextColor = arrayListOf(CONSTANT, textColor)
+          videoUrl = "9UVjjcOUJLE"
+          //   videoText = util1.getPostExplanation(postNum, postText)
+      }
+      //  drawPost.drawPostFire(post, layout)
+      //  util.sendPostToStringFirestore(post)
+
+      return post
+  }
+*/
 
 /*
  private fun arangeText10(index: Int, currentTV: TextView, post: Post) {
@@ -401,16 +578,6 @@ fun dpToPx(dp: Int, context: Context): Float {
 
       constraintLayout.addView(imageView)
   }*/
-
-
-
-
-
-
-
-
-
-
 
 
 /*

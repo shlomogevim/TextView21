@@ -3,11 +3,13 @@ package com.sg.textview21.demi
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.google.api.Context
 import com.sg.textview21.BUTTON_MARGIN
 import com.sg.textview21.Helper
 import com.sg.textview21.TOP_MARGIN
@@ -16,22 +18,145 @@ import com.sg.textview21.tools.CONSTANT
 import com.sg.textview21.tools.NO_BOTTOM
 import com.sg.textview21.tools.NO_TOP
 
-class Demi30 {
+class Demi30(val context: Context) {
 
 
-  /*
+        /*fun positionTextViews(constraintLayout: ConstraintLayout, textViews: ArrayList<TextView>, margin: Int, location: String) {
+    val constraintSet = ConstraintSet()
+    constraintSet.clone(constraintLayout)
+    val marginPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, margin.toFloat(), resources.displayMetrics).toInt()
+    textViews.forEachIndexed { index, textView ->
+        if (index == 0) {
+            if (location == "Top") {
+                constraintSet.connect(textView.id, ConstraintSet.TOP, constraintLayout.id, ConstraintSet.TOP, marginPixel)
+            } else if (location == "Bottom") {
+                constraintSet.connect(textView.id, ConstraintSet.BOTTOM, constraintLayout.id, ConstraintSet.BOTTOM, marginPixel)
+            }
+        } else {
+            if (location == "Top") {
+                constraintSet.connect(textView.id, ConstraintSet.TOP, textViews[index - 1].id, ConstraintSet.BOTTOM, marginPixel)
+            } else if (location == "Bottom") {
+                constraintSet.connect(textView.id, ConstraintSet.BOTTOM, textViews[index - 1].id, ConstraintSet.TOP, marginPixel)
+            }
+        }
+    }
+    constraintSet.applyTo(constraintLayout)
+}
+*/
 
-    class MainActivity : AppCompatActivity() {
-        val helper= Helper()
-        val handler= Handler()
-        lateinit var post: Post
-        var constraintSet = ConstraintSet()
 
-        //    val initDistancePosition= TOP_MARGIN
-        //    var initDistancePosition= BUTTON_MARGIN
-        var initDistancePosition= ""
 
-        *//*  var postText: ArrayList<String> =  arrayListOf(
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+        fun setFirstTextViewConstraints(constraintSet: ConstraintSet, constraintLayout: ConstraintLayout, textView: TextView, location: String, margin: Int) {
+                val marginPixel = margin.toFloat().toPx(context)
+                if (location == "Top") {
+                        constraintSet.connect(textView.id, ConstraintSet.TOP, constraintLayout.id, ConstraintSet.TOP, marginPixel)
+                } else if (location == "Bottom") {
+                        constraintSet.connect(textView.id, ConstraintSet.BOTTOM, constraintLayout.id, ConstraintSet.BOTTOM, marginPixel)
+                }
+        }
+
+        fun setTextViewConstraints(constraintSet: ConstraintSet, textView: TextView, previousTextView: TextView?, location: String, margin: Int) {
+                val marginPixel = margin.toFloat().toPx(context)
+                if (location == "Top") {
+                        constraintSet.connect(textView.id, ConstraintSet.TOP, previousTextView!!.id, ConstraintSet.BOTTOM, marginPixel)
+                } else if (location == "Bottom") {
+                        constraintSet.connect(textView.id, ConstraintSet.BOTTOM, previousTextView!!.id, ConstraintSet.TOP, marginPixel)
+                }
+        }
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+
+          class MainActivity : AppCompatActivity() {
+              val helper= Helper()
+              val handler= Handler()
+              lateinit var post: Post
+              var constraintSet = ConstraintSet()
+
+              //    val initDistancePosition= TOP_MARGIN
+              //    var initDistancePosition= BUTTON_MARGIN
+              var initDistancePosition= ""
+
+              *//*  var postText: ArrayList<String> =  arrayListOf(
               " אין בשבילך יופי בעולם ",
               " מלבד מה שאתה תופס כרגע ",
               " כיופי. ",
